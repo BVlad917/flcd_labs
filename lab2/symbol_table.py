@@ -1,16 +1,16 @@
 from collections import defaultdict
 
-DEFAULT_PRIME = 53
+DEFAULT_SIZE = 17
 
 
 class SymbolTable:
     def __init__(self):
         self.__hashtable = defaultdict(list)
-        self.__m = DEFAULT_PRIME
+        self.__m = DEFAULT_SIZE
 
     def add_elem(self, elem):
-        key = self.h(elem)
-        if elem in self.__hashtable[key]:
+        key, elem_index = self.find_element_position(elem)
+        if elem_index != -1:
             raise ValueError("Element already in the symbol table")
         else:
             self.__hashtable[key].append(elem)
@@ -18,11 +18,11 @@ class SymbolTable:
     def find_element_position(self, elem):
         key = self.h(elem)
         if elem in self.__hashtable[key]:
-            return key
+            return key, self.__hashtable[key].index(elem)
         else:
-            return -1
+            return key, -1
 
     def h(self, value):
-        if isinstance(value, (int, float, complex)):
-            value = str(value)
-        return len(value) % self.__m
+        str_value = str(value)
+        ascii_sum = sum([ord(c) for c in str_value])
+        return ascii_sum % self.__m
