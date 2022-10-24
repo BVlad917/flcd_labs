@@ -1,0 +1,25 @@
+{
+int a;
+int d;
+int half;
+int isprime;
+
+read(a);
+isprime=1;
+d=2;
+half=a/2+1;
+
+while(d<=half) {
+    if(a%d==0) {
+        isprime=0;
+    }
+    d=d+1;
+}
+
+if(isprime==1){
+    write("The number is prime");
+}
+else{
+    write("The number is not prime");
+}
+}

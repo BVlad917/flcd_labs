@@ -1,0 +1,7 @@
+{
+int a;
+string b;
+
+a = 012;
+b = "bad message;
+}
