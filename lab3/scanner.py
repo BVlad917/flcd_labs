@@ -5,15 +5,19 @@ from symbol_table.symbol_table import SymbolTable
 
 
 class Scanner:
-    def __init__(self, tokens_file_path='./utils/tokens.in'):
+    def __init__(self, tokens_file_path='./utils/tokens.in',
+                 pif_file_path='./utils/pif.out', st_file_path='./utils/st.out'):
         self.__tokens_file_path = tokens_file_path
+        self.__pif_file_path = pif_file_path
+        self.__st_file_path = st_file_path
         self.__symbol_table = SymbolTable()
         self.__pif = list()
         self.__read_tokens_file()
 
     def scan_program(self, file_path):
         """
-        Scan a program from the given path and look for lexical error
+        Scan a program from the given path and look for lexical error. At the end, saves the symbol table and
+        program internal form to a file each
         :param file_path: the path of the program; string
         :return: program internal form (list), symbol table (SymbolTable), and output_message
         """
@@ -30,6 +34,8 @@ class Scanner:
                 col_position = err_str.index(':')
                 err_str = err_str[:col_position + 1] + "\n" + err_str[col_position + 2:]
                 output_message = f"LEXICAL ERROR AT LINE {line_number + 1}: {err_str}"
+        self.__write_pif_to_file()
+        self.__write_st_to_file()
         return self.__pif, self.__symbol_table, output_message
 
     def scan_line(self, line):
@@ -104,6 +110,17 @@ class Scanner:
                 self.__pif.append((token, (-1, -1)))
             else:
                 self.__pif.append((token, position_pair))
+
+    def __write_pif_to_file(self):
+        with open(self.__pif_file_path, 'w') as f:
+            f.write("Program Internal Form - List of tuples representation\n")
+            for pif_elem in self.__pif:
+                f.write(pif_elem[0] + " ---> " + str(pif_elem[1]) + "\n")
+
+    def __write_st_to_file(self):
+        with open(self.__st_file_path, 'w') as f:
+            f.write("Symbol Table - Hash Table Representation\n")
+            f.write(str(self.__symbol_table))
 
     @staticmethod
     def __is_identifier(word):

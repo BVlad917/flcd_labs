@@ -1,0 +1,6 @@
+Symbol Table - Hash Table Representation
+(1, 0) ---> min
+(12, 0) ---> a
+(13, 0) ---> b
+(13, 1) ---> "Minimum is "
+(14, 0) ---> c
