@@ -1,6 +1,11 @@
 Symbol Table - Hash Table Representation
-(1, 0) ---> min
+(3, 0) ---> half
+(5, 0) ---> "The number is not prime"
+(10, 0) ---> -2
+(10, 1) ---> "The number is prime"
 (12, 0) ---> a
-(13, 0) ---> b
-(13, 1) ---> "Minimum is "
-(14, 0) ---> c
+(13, 0) ---> isprime
+(14, 0) ---> 0
+(15, 0) ---> d
+(15, 1) ---> 1
+(16, 0) ---> 2

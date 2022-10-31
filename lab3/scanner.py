@@ -1,5 +1,6 @@
 import re
 from collections import defaultdict
+from contextlib import suppress
 
 from symbol_table.symbol_table import SymbolTable
 
@@ -91,25 +92,19 @@ class Scanner:
         :param tokens: list of tokens to be added
         :param tokens_category: dictionary which has all tokens classified by type; output of the method <classify>
         """
-        # add the identifiers to the symbol table
-        for identifier in tokens_category["identifiers"]:
-            try:
-                self.__symbol_table.add_elem(identifier)
-            except ValueError:
-                pass  # identifier already in the symbol table
-        # add the constants to the symbol table
-        for constant in tokens_category["constants"]:
-            try:
-                self.__symbol_table.add_elem(constant)
-            except ValueError:
-                pass  # constant already in the symbol table
+        # add the identifiers and constants to the symbol table
+        for elem in tokens_category["identifiers"] + tokens_category["constants"]:
+            with suppress(ValueError):
+                self.__symbol_table.add_elem(elem)
         # add all (possible) tokens to the program internal form (PIF)
         for token in tokens:
             position_pair = self.__symbol_table.find_symbol_position(token)
             if position_pair[1] == -1:
                 self.__pif.append((token, (-1, -1)))
-            else:
-                self.__pif.append((token, position_pair))
+            elif self.__is_constant(token):
+                self.__pif.append(("'const'", position_pair))
+            elif self.__is_identifier(token):
+                self.__pif.append(("'id'", position_pair))
 
     def __write_pif_to_file(self):
         with open(self.__pif_file_path, 'w') as f:
@@ -153,6 +148,12 @@ class Scanner:
             return False
         regex_pattern = r'^(([a-zA-Z])|([0-9])|' + self.__get_regex_splitter() + ')+$'
         return re.match(regex_pattern, word[1:-1])
+
+    def __is_constant(self, word):
+        """
+        Check if the input is ANY constant (integer, char, or string)
+        """
+        return self.__is_int_constant(word) or self.__is_char_constant(word) or self.__is_str_constant(word)
 
     def __is_operator(self, word):
         """
@@ -237,7 +238,35 @@ class Scanner:
             line_portion = re.split(self.__get_regex_splitter(), line_portion)
             line_portion = [t for t in line_portion if t is not None and t != ' ' and t != '']
             numbers_and_non_constants.extend(line_portion)
-        return numbers_and_non_constants
+        return self.__reconstruct_signed_numbers(numbers_and_non_constants)
+
+    def __reconstruct_signed_numbers(self, token_list):
+        """
+        Reconstructs signed numbers in the case of '+' and '-' being used as unary operators
+        :param token_list: list of split tokens
+        :return: new list of split tokens, with signed numbers if there are any
+        """
+        if len(token_list) < 3: return token_list
+        new_token_list = [token_list[0]]
+        idx = 1
+        while idx < len(token_list) - 1:
+            prev_elem, elem, next_elem = token_list[idx - 1], token_list[idx], token_list[idx + 1]
+            is_int_or_id_prev = self.__is_int_constant(prev_elem) or self.__is_identifier(prev_elem)
+            is_int_or_id_next = self.__is_int_constant(next_elem) or self.__is_identifier(next_elem)
+            if elem in ['+', '-'] and not is_int_or_id_prev and is_int_or_id_next:
+                # unary operator
+                new_token_list.append(elem + next_elem)
+                idx += 1
+            else:
+                # binary operator
+                new_token_list.append(elem)
+            idx += 1
+        is_int_or_id_stl = self.__is_int_constant(token_list[-3]) or self.__is_identifier(token_list[-3])
+        is_int_or_id_last = self.__is_int_constant(token_list[-1]) or self.__is_identifier(token_list[-1])
+        if not (token_list[-2] in ['+', '-'] and not is_int_or_id_stl and is_int_or_id_last):
+            # binary operator => also add the last element
+            new_token_list.append(token_list[-1])
+        return new_token_list
 
     def __group_quotes(self, line, quote_type):
         """
