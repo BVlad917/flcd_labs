@@ -26,9 +26,7 @@ class FiniteAutomata:
         groups = defaultdict(list)
         for t in self.__transitions:
             groups[(t.get_state(), t.get_accepted())].append(t.get_result())
-        if any([len(group) > 1 for group in groups.values()]):
-            return False
-        return True
+        return all([len(group) <= 1 for group in groups.values()])
 
     def is_sequence_accepted(self, seq: str) -> bool:
         """

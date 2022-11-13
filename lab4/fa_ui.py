@@ -2,6 +2,9 @@ from finite_automata import FiniteAutomata
 
 
 class FaMenu:
+    """
+    UI interface (menu) for the Finite Automata program
+    """
     def __init__(self, fa: FiniteAutomata):
         self.__fa = fa
 
