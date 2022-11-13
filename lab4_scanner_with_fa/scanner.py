@@ -2,6 +2,7 @@ import re
 from collections import defaultdict
 from contextlib import suppress
 
+from finite_automata.finite_automata import FiniteAutomata
 from symbol_table.symbol_table import SymbolTable
 
 
@@ -123,14 +124,18 @@ class Scanner:
         """
         Check if the input is an identifier (using the defined rules of the program)
         """
-        return re.match('^(_|[a-zA-Z])([a-zA-Z]|[0-9])*$', word)
+        identifier_fa = FiniteAutomata("./finite_automata/fa_identifiers.in")
+        return identifier_fa.is_sequence_accepted(word)
+        # return re.match('^(_|[a-zA-Z])([a-zA-Z]|[0-9])*$', word)
 
     @staticmethod
     def __is_int_constant(word):
         """
         Check if the input is an integer constant (using the defined rules of the program)
         """
-        return re.match('^(-)?([1-9]+[0-9]*)$|^0$', word)
+        int_fa = FiniteAutomata("finite_automata/fa_integers.in")
+        return int_fa.is_sequence_accepted(word)
+        # return re.match('^(-)?([1-9]+[0-9]*)$|^0$', word)
 
     def __is_char_constant(self, word):
         """

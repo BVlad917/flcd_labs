@@ -1,0 +1,20 @@
+{
+int a;
+int b;
+int c;
+int min;
+
+if (a<b) {
+    min=a;
+}
+else {
+    min=b;
+}
+
+if (c<min) {
+    min=c;
+}
+
+write("Minimum is ")
+write(min);
+}
