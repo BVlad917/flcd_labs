@@ -35,6 +35,9 @@ class FaMenu:
               f"x. Exit\n")
 
     def __print_is_sequence_accepted(self) -> None:
+        if not self.__fa.is_dfa():
+            print("The given FA is NOT a DFA. Cannot check if a sequence is accepted.")
+            return
         seq = input("Please enter a sequence: ")
         if self.__fa.is_sequence_accepted(seq):
             print(f"Yes, the sequence '{seq}' is accepted by the language.")
