@@ -42,7 +42,6 @@ class FaValidator:
     def __validate_results_in_transitions(self) -> None:
         """
         Validate that all results in the transitions are valid states (i.e., were specified in the file)
-        :return:
         """
         transition_results = set([t.get_result() for t in self.__fa.transitions])
         fa_results = set(self.__fa.states)
@@ -52,7 +51,6 @@ class FaValidator:
     def __validate_accepted_in_transitions(self) -> None:
         """
         Validate that all symbols which are used as <accepted> are valid symbols (i.e., appear in the alphabet)
-        :return:
         """
         transition_accepted = set([t.get_accepted() for t in self.__fa.transitions])
         fa_alphabet = set(self.__fa.alphabet)
