@@ -2,6 +2,7 @@ from collections import defaultdict
 from typing import List
 
 from transition import Transition
+from validator import FaValidator
 
 
 class FiniteAutomata:
@@ -17,6 +18,8 @@ class FiniteAutomata:
         self.__is = None
         self.__fs = None
         self.__read_from_file(input_file_path)
+        validator = FaValidator(self)
+        validator.validate()
 
     def is_dfa(self) -> bool:
         """
@@ -64,15 +67,15 @@ class FiniteAutomata:
                     continue
                 elems_type, elems = line.split('=')[0], line.split('=')[1].split(' ')
                 if elems_type == "Q":
-                    self.__states = elems
+                    self.__states = list(set(elems))
                 elif elems_type == "S":
-                    self.__alphabet = elems
+                    self.__alphabet = list(set(elems))
                 elif elems_type == "T":
-                    self.__transitions = self.__parse_transitions(elems)
+                    self.__transitions = list(set(self.__parse_transitions(elems)))
                 elif elems_type == "IS":
                     self.__is = elems[0]
                 elif elems_type == "FS":
-                    self.__fs = elems
+                    self.__fs = list(set(elems))
                 else:
                     raise ValueError("ERROR: Invalid elements type.")
 
@@ -89,17 +92,22 @@ class FiniteAutomata:
             parsed_transitions.append(Transition(t[0], t[1], t[2]))
         return parsed_transitions
 
-    def get_states(self):
+    @property
+    def states(self):
         return self.__states
 
-    def get_alphabet(self):
+    @property
+    def alphabet(self):
         return self.__alphabet
 
-    def get_transitions(self):
+    @property
+    def transitions(self):
         return self.__transitions
 
-    def get_initial_state(self):
+    @property
+    def initial_state(self):
         return self.__is
 
-    def get_final_states(self):
+    @property
+    def final_states(self):
         return self.__fs

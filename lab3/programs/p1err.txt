@@ -2,6 +2,7 @@
 int a;
 string b;
 
-a = 12;
-b = "bad message;
+_ = 3;
+a = 3-0;
+b = "bad message";
 }

@@ -55,21 +55,21 @@ class FaMenu:
         Print the states of the FA
         """
         print("STATES: ", end='')
-        print(self.__fa.get_states())
+        print(self.__fa.states)
 
     def __print_alphabet(self) -> None:
         """
         Print the alphabet of the FA
         """
         print("ALPHABET: ", end='')
-        print(self.__fa.get_alphabet())
+        print(self.__fa.alphabet)
 
     def __print_transitions(self) -> None:
         """
         Print the transitions of the FA
         """
         print("TRANSITIONS:")
-        for t in self.__fa.get_transitions():
+        for t in self.__fa.transitions:
             print(t)
 
     def __print_initial_state(self) -> None:
@@ -77,13 +77,13 @@ class FaMenu:
         Print the initial state of the FA
         """
         print("INITIAL STATE: ", end='')
-        print(self.__fa.get_initial_state())
+        print(self.__fa.initial_state)
 
     def __print_final_states(self) -> None:
         """
         Print the final states of the FA
         """
         print("FINAL STATE: ", end='')
-        print(self.__fa.get_final_states())
+        print(self.__fa.final_states)
 
 
