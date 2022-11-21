@@ -1,0 +1,2 @@
+# can add comments
+G=({S, A, B}, {a, b}, {S->aA, A->aA|bB|b, B->bB|b} ,S)
