@@ -104,4 +104,7 @@ class Grammar:
         self.__productions = []
         for line in non_comm_lines[2:-1]:
             self.__productions.extend(self.__parse_production_line(line))
-        self.__starting_symbol = non_comm_lines[-1].strip()
+        starting_symbol_nt = NonTerminal(non_comm_lines[-1].strip())
+        if starting_symbol_nt not in self.__non_terminals:
+            raise ValueError(f'The given starting symbol ("{non_comm_lines[-1].strip()}") is not a non-terminal.')
+        self.__starting_symbol = starting_symbol_nt

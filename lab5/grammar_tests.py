@@ -36,6 +36,10 @@ class GrammarTests(unittest.TestCase):
         self.assertIn(p5, g.productions)
         self.assertIn(p6, g.productions)
 
+    def test_read_grammar_starting_symbol(self):
+        g = Grammar("./inputs/grammar1.in")
+        self.assertEquals(g.starting_symbol, NonTerminal("S"))
+
     def test_is_cfg(self):
         g = Grammar("./inputs/grammar1.in")
         self.assertTrue(g.is_cfg())
