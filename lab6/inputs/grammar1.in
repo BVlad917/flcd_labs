@@ -1,0 +1,16 @@
+# lines have to represent the following (in this order):
+# NB: only non-commented and non-empty lines are taken into account
+
+# 1st line ---> non-terminals
+# 2nd line ---> terminals
+# 3rd to penultimate lines ---> productions
+# last line ---> starting symbol
+
+# the below grammar corresponds to: G=({S, A, B}, {a, b}, {S->aA, A->aA|bB|b, B->bB|b} ,S)
+
+S,A,B
+a,b
+S~a`A
+A~a`A|b`B|b
+B~b`B|b
+S
