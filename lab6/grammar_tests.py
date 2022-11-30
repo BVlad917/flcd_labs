@@ -1,7 +1,6 @@
 import unittest
 
 from grammar import Grammar
-from production import Production
 from symbols.non_terminal import NonTerminal
 from symbols.terminal import Terminal
 
@@ -20,21 +19,24 @@ class GrammarTests(unittest.TestCase):
         self.assertIn(Terminal("a"), g.terminals)
         self.assertIn(Terminal("b"), g.terminals)
 
-    def test_read_grammar_productions(self):
+    def test_read_grammar_super_productions(self):
         g = Grammar("./inputs/grammar1.in")
-        self.assertEquals(len(g.productions), 6)
-        p1 = Production([NonTerminal("S")], [Terminal("a"), NonTerminal("A")])
-        p2 = Production([NonTerminal("A")], [Terminal("a"), NonTerminal("A")])
-        p3 = Production([NonTerminal("A")], [Terminal("b"), NonTerminal("B")])
-        p4 = Production([NonTerminal("A")], [Terminal("b")])
-        p5 = Production([NonTerminal("B")], [Terminal("b"), NonTerminal("B")])
-        p6 = Production([NonTerminal("B")], [Terminal("b")])
-        self.assertIn(p1, g.productions)
-        self.assertIn(p2, g.productions)
-        self.assertIn(p3, g.productions)
-        self.assertIn(p4, g.productions)
-        self.assertIn(p5, g.productions)
-        self.assertIn(p6, g.productions)
+        self.assertEquals(len(g.super_productions), 3)
+        # first super production
+        p1 = g.super_productions[0]
+        self.assertEquals(p1.name, "S")
+        self.assertEquals(p1.lhs, [NonTerminal("S")])
+        self.assertEquals(p1.rhs_length, 1)
+        # second super production
+        p2 = g.super_productions[1]
+        self.assertEquals(p2.name, "A")
+        self.assertEquals(p2.lhs, [NonTerminal("A")])
+        self.assertEquals(p2.rhs_length, 3)
+        # third super production
+        p3 = g.super_productions[2]
+        self.assertEquals(p3.name, "B")
+        self.assertEquals(p3.lhs, [NonTerminal("B")])
+        self.assertEquals(p3.rhs_length, 2)
 
     def test_read_grammar_starting_symbol(self):
         g = Grammar("./inputs/grammar1.in")
@@ -46,7 +48,26 @@ class GrammarTests(unittest.TestCase):
 
     def test_non_terminal_productions(self):
         g = Grammar("./inputs/grammar1.in")
-        self.assertEquals(len(g.productions_for_non_terminal("S")), 1)
-        self.assertEquals(len(g.productions_for_non_terminal("A")), 3)
-        self.assertEquals(len(g.productions_for_non_terminal("B")), 2)
-        self.assertRaises(ValueError, g.productions_for_non_terminal, "C")
+        self.assertEquals(len(g.simple_productions_for_non_terminal("S")), 1)
+        self.assertEquals(len(g.simple_productions_for_non_terminal("A")), 3)
+        self.assertEquals(len(g.simple_productions_for_non_terminal("B")), 2)
+        self.assertRaises(ValueError, g.simple_productions_for_non_terminal, "C")
+
+    def test_simple_productions(self):
+        g = Grammar("./inputs/grammar1.in")
+        p = g.super_productions[1]
+        self.assertEquals(p.name, "A")
+        head = p.rhs_head
+        self.assertEquals(head.name, "A1")
+        self.assertEquals(head.rhs, [Terminal("a"), NonTerminal("A")])
+        self.assertEquals(head.parent, p)
+        head = head.next_simple_production
+        self.assertEquals(head.name, "A2")
+        self.assertEquals(head.rhs, [Terminal("b"), NonTerminal("B")])
+        self.assertEquals(head.parent, p)
+        head = head.next_simple_production
+        self.assertEquals(head.name, "A3")
+        self.assertEquals(head.rhs, [Terminal("b")])
+        self.assertEquals(head.parent, p)
+        head = head.next_simple_production
+        self.assertIsNone(head)

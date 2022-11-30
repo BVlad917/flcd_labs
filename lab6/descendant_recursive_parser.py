@@ -13,7 +13,7 @@ class DescendantRecursiveParser:
 
     def expand(self):
         top = self.__configuration.pop_input_stack()
-        production = top.productions[self.__production_index[-1]]
+        production = top.super_productions[self.__production_index[-1]]
         self.__configuration.push_on_working_stack(production)
         self.__configuration.push_list_on_input_stack(production.rhs[::-1])
 
@@ -21,3 +21,6 @@ class DescendantRecursiveParser:
         top = self.__configuration.pop_input_stack()
         self.__configuration.push_on_working_stack(top)
         self.__configuration.increment_seq_pos()
+
+    def momentary_insuccess(self):
+        pass

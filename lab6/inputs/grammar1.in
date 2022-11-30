@@ -3,7 +3,7 @@
 
 # 1st line ---> non-terminals
 # 2nd line ---> terminals
-# 3rd to penultimate lines ---> productions
+# 3rd to penultimate lines ---> super_productions
 # last line ---> starting symbol
 
 # the below grammar corresponds to: G=({S, A, B}, {a, b}, {S->aA, A->aA|bB|b, B->bB|b} ,S)

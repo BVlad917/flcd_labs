@@ -1,4 +1,4 @@
-from production import Production
+from productions.super_production import SuperProduction
 from symbols.epsilon import Epsilon
 from symbols.non_terminal import NonTerminal
 from symbols.symbol_type import SymbolType
@@ -10,7 +10,7 @@ class Grammar:
     Grammar representation which holds the following:
     - terminals: list of Terminals instances
     - non_terminals: list of NonTerminals instances
-    - productions: list of Production instances
+    - super_productions: list of SimpleProduction instances
     - starting_symbol: NonTerminal instance
     """
     def __init__(self, input_file):
@@ -20,16 +20,19 @@ class Grammar:
         """
         Return True if the grammar is a CFG; False otherwise
         """
-        return all(len(p.lhs) == 1 and p.lhs[0].symbol_type == SymbolType.NON_TERMINAL for p in self.__productions)
+        super_productions = self.__super_productions
+        return all(len(p.lhs) == 1 and p.lhs[0].symbol_type == SymbolType.NON_TERMINAL for p in super_productions)
 
-    def productions_for_non_terminal(self, nt_str: str):
+    def simple_productions_for_non_terminal(self, nt_str: str):
         """
-        Return the productions corresponding to the given non-terminal string
+        Return the super_productions corresponding to the given non-terminal string
         """
         corresp_nt = NonTerminal(nt_str)
         if corresp_nt not in self.__non_terminals:
             raise ValueError(f"The given string ({nt_str}) does not correspond to an existing non terminal.")
-        return [p for p in self.__productions if corresp_nt in p.lhs]
+        all_corresponding_sp = [p for p in self.__super_productions if corresp_nt in p.lhs]
+        simple_productions = [sp.all_simple_productions for sp in all_corresponding_sp]
+        return [item for sublist in simple_productions for item in sublist]
 
     @property
     def terminals(self):
@@ -40,8 +43,8 @@ class Grammar:
         return self.__non_terminals
 
     @property
-    def productions(self):
-        return self.__productions
+    def super_productions(self):
+        return self.__super_productions
 
     @property
     def starting_symbol(self):
@@ -73,21 +76,19 @@ class Grammar:
         """
         Parse the given string which represents a production with multiple RHS values delimited by OR ("|")
         :param production_string: string representing a production; str
-        :return: list of Production instances
+        :return: list of SimpleProduction instances
         e.g., input: production_string="B~b`B|b"
-              output: [Production(lhs=[NonTerminal("B")], rhs=[Terminal("b"), NonTerminal(B)]),
-                        Production(lhs=[NonTerminal("B")], rhs=[NonTerminal("b")])]
+              output: [SimpleProduction(lhs=[NonTerminal("B")], rhs=[Terminal("b"), NonTerminal(B)]),
+                        SimpleProduction(lhs=[NonTerminal("B")], rhs=[NonTerminal("b")])]
         """
-        productions = []
         splits = production_string.split('~')
         if len(splits) != 2:
             raise ValueError(f"Incorrect production format for: {production_string}")
         lhs_string, rhs_strings = splits[0], splits[1]
         lhs = self.__parse_symbol_combination_string(lhs_string)
-        for rhs_string in rhs_strings.split('|'):
-            rhs = self.__parse_symbol_combination_string(rhs_string)
-            productions.append(Production(lhs, rhs))
-        return productions
+        all_rhs = [self.__parse_symbol_combination_string(rhs_string) for rhs_string in rhs_strings.split('|')]
+        super_production = SuperProduction(lhs, all_rhs)
+        return super_production
 
     def __read_file(self, input_file: str):
         """
@@ -101,9 +102,9 @@ class Grammar:
             raise ValueError("Invalid input file format")
         self.__non_terminals = [NonTerminal(elem) for elem in non_comm_lines[0].split(',')]
         self.__terminals = [Terminal(elem) for elem in non_comm_lines[1].split(',')]
-        self.__productions = []
+        self.__super_productions = []
         for line in non_comm_lines[2:-1]:
-            self.__productions.extend(self.__parse_production_line(line))
+            self.__super_productions.append(self.__parse_production_line(line))
         starting_symbol_nt = NonTerminal(non_comm_lines[-1].strip())
         if starting_symbol_nt not in self.__non_terminals:
             raise ValueError(f'The given starting symbol ("{non_comm_lines[-1].strip()}") is not a non-terminal.')
