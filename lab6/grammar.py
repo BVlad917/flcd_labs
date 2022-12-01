@@ -23,16 +23,21 @@ class Grammar:
         super_productions = self.__super_productions
         return all(len(p.lhs) == 1 and p.lhs[0].symbol_type == SymbolType.NON_TERMINAL for p in super_productions)
 
+    def find_super_production(self, sp_str: str):
+        found = [s for s in self.__super_productions if s.name == sp_str]
+        if not len(found):
+            raise ValueError(f"No super production with the name: {sp_str}")
+        return found[0]
+
     def simple_productions_for_non_terminal(self, nt_str: str):
         """
-        Return the super_productions corresponding to the given non-terminal string
+        Return the super_productions corresponding to the given non-terminal name
         """
         corresp_nt = NonTerminal(nt_str)
         if corresp_nt not in self.__non_terminals:
-            raise ValueError(f"The given string ({nt_str}) does not correspond to an existing non terminal.")
-        all_corresponding_sp = [p for p in self.__super_productions if corresp_nt in p.lhs]
-        simple_productions = [sp.all_simple_productions for sp in all_corresponding_sp]
-        return [item for sublist in simple_productions for item in sublist]
+            raise ValueError(f"The given name ({nt_str}) does not correspond to an existing non terminal.")
+        corresponding_sp = self.find_super_production(nt_str)
+        return corresponding_sp.all_simple_productions
 
     @property
     def terminals(self):
@@ -53,7 +58,7 @@ class Grammar:
     def __parse_symbol_combination_string(self, symbol_comb_str):
         """
         Parse a combination of symbols delimited by "`" and return the list of symbols
-        :param symbol_comb_str: string with symbols delimited by "`"; str
+        :param symbol_comb_str: name with symbols delimited by "`"; str
         :return: list of Symbol instances
         e.g., input: symbol_comb_str = "a`A"
               output: [NonTerminal("a"), Terminal("A")]
@@ -74,8 +79,8 @@ class Grammar:
 
     def __parse_production_line(self, production_string):
         """
-        Parse the given string which represents a production with multiple RHS values delimited by OR ("|")
-        :param production_string: string representing a production; str
+        Parse the given name which represents a production with multiple RHS values delimited by OR ("|")
+        :param production_string: name representing a production; str
         :return: list of SimpleProduction instances
         e.g., input: production_string="B~b`B|b"
               output: [SimpleProduction(lhs=[NonTerminal("B")], rhs=[Terminal("b"), NonTerminal(B)]),

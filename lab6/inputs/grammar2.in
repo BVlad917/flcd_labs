@@ -1,12 +1,12 @@
 program,decllist,stmtlist,declaration,type,identifier,typesimple,typearray,integer,nonneginteger,identifier,stmt,simplestmt,structstmt,assignstmt,iostmt,arrayaccess,expression,term,factor,conststring,constchar,ifstmt,whilestmt,condition,relation
 
-{,},;,int,char,string,[,],=,+,-,*,/,(,),read,write,if,else,while,<=,>=,==,!=,<,>
+{,},;,int,char,name,[,],=,+,-,*,/,(,),read,write,if,else,while,<=,>=,==,!=,<,>
 
 program~{`decllist`stmtlist`}
 decllist~declaration|declaration`decllist
 declaration~type`identifier`;
 type~typesimple|typearray
-typesimple~int|char|string
+typesimple~int|char|name
 typearray~typesimple`[`nonneginteger`]|typesimple`[`identifier`]
 stmtlist~stmt|stmt`stmtlist
 stmt~simplestmt|structstmt

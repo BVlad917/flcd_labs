@@ -11,4 +11,4 @@ class Terminal(Symbol):
         self._Symbol__symbol_type = SymbolType.TERMINAL
 
     def __str__(self):
-        return f'TERMINAL("{self.string}")'
+        return f'TERMINAL("{self.name}")'

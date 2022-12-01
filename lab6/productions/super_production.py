@@ -5,7 +5,7 @@ from productions.production_type import ProductionType
 
 class SuperProduction(Production):
     def __init__(self, lhs, all_rhs):
-        super().__init__('_'.join(elem.string for elem in lhs))
+        super().__init__('_'.join(elem.name for elem in lhs))
         self._ProductionBase__production_type = ProductionType.SUPER_PRODUCTION
         self.__lhs = lhs
         self.__create_super_production(all_rhs)

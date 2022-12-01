@@ -11,4 +11,4 @@ class Epsilon(Symbol):
         self._Symbol__symbol_type = SymbolType.EPSILON
 
     def __str__(self):
-        return f'EPSILON("{self.string}")'
+        return f'EPSILON("{self.name}")'
