@@ -57,17 +57,20 @@ class GrammarTests(unittest.TestCase):
         g = Grammar("./inputs/grammar1.in")
         p = g.super_productions[1]
         self.assertEquals(p.name, "A")
-        head = p.rhs_head
-        self.assertEquals(head.name, "A1")
-        self.assertEquals(head.rhs, [Terminal("a"), NonTerminal("A")])
-        self.assertEquals(head.parent, p)
-        head = head.next_simple_production
-        self.assertEquals(head.name, "A2")
-        self.assertEquals(head.rhs, [Terminal("b"), NonTerminal("B")])
-        self.assertEquals(head.parent, p)
-        head = head.next_simple_production
-        self.assertEquals(head.name, "A3")
-        self.assertEquals(head.rhs, [Terminal("b")])
-        self.assertEquals(head.parent, p)
-        head = head.next_simple_production
-        self.assertIsNone(head)
+        p1 = p.rhs_head
+        self.assertEquals(p1.name, "A1")
+        self.assertEquals(p1.rhs, [Terminal("a"), NonTerminal("A")])
+        self.assertEquals(p1.parent, p)
+        p2 = p1.next_simple_production
+        self.assertEquals(p2.name, "A2")
+        self.assertEquals(p2.rhs, [Terminal("b"), NonTerminal("B")])
+        self.assertEquals(p2.parent, p)
+        p3 = p2.next_simple_production
+        self.assertEquals(p3.name, "A3")
+        self.assertEquals(p3.rhs, [Terminal("b")])
+        self.assertEquals(p3.parent, p)
+        p4 = p3.next_simple_production
+        self.assertIsNone(p4)
+        self.assertEquals(p1.parent, p2.parent)
+        self.assertEquals(p1.parent, p3.parent)
+        self.assertEquals(p2.parent, p3.parent)
