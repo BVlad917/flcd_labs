@@ -1,4 +1,5 @@
 from configuration import Configuration
+from parser_output import ParserOutput
 from state_type import StateType
 from symbols.symbol_type import SymbolType
 
@@ -22,7 +23,37 @@ class DescendantRecursiveParser:
         self.__configuration = Configuration(grammar.starting_symbol)
 
     def solve(self):
-        pass
+        """
+        Implement the Descendant Recursive Algorithm by calling the algorithm's specific
+        functions (expand, advance, momentary insuccess, back, another try, success) in
+        the appropriate cases
+        """
+        while self.__configuration.current_state not in [StateType.FINAL_STATE, StateType.ERROR_STATE]:
+            if self.__configuration.current_state == StateType.NORMAL_STATE:
+                current_index_in_w = self.__configuration.current_seq_pos
+                input_stack_is_empty = self.__configuration.is_input_stack_empty()
+                if current_index_in_w == len(self.__w) + 1 and input_stack_is_empty:
+                    self.success()
+                else:
+                    top_list_input_stack = self.__configuration.peek_input_stack()
+                    top_input_stack = top_list_input_stack[0]
+                    current_seq_pos = self.__configuration.current_seq_pos
+                    if top_input_stack.symbol_type == SymbolType.NON_TERMINAL:
+                        self.expand()
+                    elif current_seq_pos - 1 < len(self.__w) and top_input_stack.name == self.__w[current_seq_pos - 1]:
+                        self.advance()
+                    else:
+                        self.momentary_insuccess()
+            else:
+                top_working_stack = self.__configuration.peek_working_stack()
+                if top_working_stack.symbol_type == SymbolType.TERMINAL:
+                    self.back()
+                else:
+                    self.another_try()
+        if self.__configuration.current_state == StateType.ERROR_STATE:
+            return "ERROR - SEQUENCE NOT ACCEPTED", None
+        else:
+            return "SEQUENCE ACCEPTED", ParserOutput(self.__configuration)
 
     def expand(self):
         """
@@ -78,6 +109,7 @@ class DescendantRecursiveParser:
     def another_try(self):
         """
         Another try method of the Descendant Recursive Parser.
+        The top of the working stack can only be a SimpleProduction at this point.
         Runs one of 3 another try sub-methods (depending on the case):
             - another_try1: if the simple production which is the head of the working stack
             has a not None "next_production" attribute

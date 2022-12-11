@@ -30,6 +30,9 @@ class Configuration:
     def peek_working_stack(self):
         return self.__working_stack[-1]
 
+    def peek_input_stack(self):
+        return self.__input_stack[-1]
+
     def push_on_input_stack(self, elem):
         self.__input_stack.append(elem)
 
@@ -41,6 +44,12 @@ class Configuration:
 
     def decrement_seq_pos(self):
         self.__current_seq_pos -= 1
+
+    def is_input_stack_empty(self):
+        return len(self.__input_stack) == 0
+
+    def is_working_stack_empty(self):
+        return len(self.__working_stack) == 0
 
     @property
     def current_state(self):

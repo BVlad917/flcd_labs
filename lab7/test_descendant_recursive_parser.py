@@ -113,6 +113,14 @@ class TestDescendantRecursiveParser(unittest.TestCase):
         self.parser.another_try()
         self.parser.momentary_insuccess()
         self.parser.another_try()
+
+        conf = self.parser.configuration
+        print()
+        print(conf.current_state)
+        print(conf.current_seq_pos)
+        print(conf.working_stack)
+        print(conf.input_stack)
+
         self.parser.advance()
         self.parser.advance()
         self.parser.expand()
@@ -129,3 +137,9 @@ class TestDescendantRecursiveParser(unittest.TestCase):
         print(conf.current_seq_pos)
         print(conf.working_stack)
         print(conf.input_stack)
+
+    def test_solver(self):
+        output_msg, parser_output = self.parser.solve()
+        parser_output.save_to_file()
+        self.assertEquals(output_msg, "SEQUENCE ACCEPTED")
+        self.assertIn("S1 a S2 a S3 c b S3 c", parser_output.representation)

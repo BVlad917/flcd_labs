@@ -23,10 +23,18 @@ class Grammar:
         super_productions = self.__super_productions
         return all(len(p.lhs) == 1 and p.lhs[0].symbol_type == SymbolType.NON_TERMINAL for p in super_productions)
 
-    def find_super_production(self, sp_str: str):
-        found = [s for s in self.__super_productions if s.name == sp_str]
+    def find_super_production(self, super_production_str: str):
+        found = [s for s in self.__super_productions if s.name == super_production_str]
         if not len(found):
-            raise ValueError(f"No super production with the name: {sp_str}")
+            raise ValueError(f"No super production with the name: {super_production_str}")
+        return found[0]
+
+    def find_simple_production(self, simple_production_str: str):
+        super_production_str = ''.join(c for c in simple_production_str if not c.isdigit())
+        all_simple_productions = self.simple_productions_for_non_terminal(super_production_str)
+        found = [sp for sp in all_simple_productions if sp.name == simple_production_str]
+        if not len(found):
+            raise ValueError(f"No simple production with the name: {simple_production_str}")
         return found[0]
 
     def simple_productions_for_non_terminal(self, nt_str: str):

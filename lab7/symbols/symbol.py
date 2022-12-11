@@ -7,8 +7,8 @@ class Symbol(ABC):
     - name: the name of the symbol; str
     - symbol_type: the type of the symbol (terminal, non terminal, epsilon); member of SymbolType enum
     """
-    def __init__(self, string: str):
-        self.__string = string
+    def __init__(self, name: str):
+        self.__name = name
         self.__symbol_type = None
 
     @property
@@ -17,7 +17,7 @@ class Symbol(ABC):
 
     @property
     def name(self):
-        return self.__string
+        return self.__name
 
     def __eq__(self, other):
         return self.symbol_type == other.symbol_type and self.name == other.name

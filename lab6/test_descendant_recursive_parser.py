@@ -116,14 +116,6 @@ class TestDescendantRecursiveParser(unittest.TestCase):
         self.parser.advance()
         self.parser.advance()
         self.parser.expand()
-
-        conf = self.parser.configuration
-        print()
-        print(conf.current_state)
-        print(conf.current_seq_pos)
-        print(conf.working_stack)
-        print(conf.input_stack)
-
         self.parser.momentary_insuccess()
         self.parser.another_try()
         self.parser.momentary_insuccess()
