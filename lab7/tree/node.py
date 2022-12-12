@@ -3,6 +3,7 @@ class Node:
         self.__info = info
         self.__first_child = None
         self.__right_sibling = None
+        self.__left_sibling = None
 
     @property
     def info(self):
@@ -23,3 +24,11 @@ class Node:
     @right_sibling.setter
     def right_sibling(self, node):
         self.__right_sibling = node
+
+    @property
+    def left_sibling(self):
+        return self.__left_sibling
+
+    @left_sibling.setter
+    def left_sibling(self, node):
+        self.__left_sibling = node
