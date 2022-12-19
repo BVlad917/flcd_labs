@@ -59,9 +59,8 @@ class Scanner:
         :param line: the line to be tokenized; string
         :return: the tokens in the line
         """
-        strings, chars, non_strings_or_chars = self.__extract_strings_and_chars(line)
-        tokens = strings + chars
-        tokens += self.__split_non_strings_or_chars(non_strings_or_chars)
+        split_line = self.__extract_strings_and_chars(line)
+        tokens = self.__split_non_strings_or_chars(split_line)
         return tokens
 
     def classify(self, tokens):
@@ -103,13 +102,21 @@ class Scanner:
             if position_pair[1] == -1:
                 self.__pif.append((token, (-1, -1)))
             elif self.__is_constant(token):
-                self.__pif.append(("'const'", position_pair))
+                if self.__is_char_constant(token):
+                    elem = "constchar"
+                elif self.__is_str_constant(token):
+                    elem = "conststring"
+                elif self.__is_int_constant(token) and token[0] != '-':
+                    elem = "nonneginteger"
+                else:
+                    elem = "integer"
+                self.__pif.append((elem, position_pair))
             elif self.__is_identifier(token):
-                self.__pif.append(("'id'", position_pair))
+                self.__pif.append(("identifier", position_pair))
 
     def __write_pif_to_file(self):
         with open(self.__pif_file_path, 'w') as f:
-            f.write("Program Internal Form - List of tuples representation\n")
+            # f.write("Program Internal Form - List of tuples representation\n")
             for pif_elem in self.__pif:
                 f.write(pif_elem[0] + " ---> " + str(pif_elem[1]) + "\n")
 
@@ -216,13 +223,22 @@ class Scanner:
                     char_constants = []
                     non_string_or_char = ["write(", ")"]
         """
+        if not len(line.strip()):
+            return []
         grouped_string_delim = self.__group_quotes(line, '"')
         grouped_char_delim = self.__group_quotes(line, "'")
         all_delimiters = sorted(grouped_string_delim + grouped_char_delim, key=lambda x: x[0])
-        string_constants = self.__get_strings_between_indexes(line, grouped_string_delim)
-        char_constants = self.__get_strings_between_indexes(line, grouped_char_delim)
-        non_string_or_char = self.__get_strings_outside_indexes(line, all_delimiters) if len(all_delimiters) else [line]
-        return string_constants, char_constants, non_string_or_char
+        if len(all_delimiters):
+            new_delimiters = []
+            for delim1, delim2 in zip(all_delimiters[:-1], all_delimiters[1:]):
+                new_delimiters.append((delim1[1] + 1, delim2[0] - 1))
+            all_delimiters = sorted(all_delimiters + new_delimiters, key=lambda x: x[0])
+            all_delimiters.insert(0, (0, all_delimiters[0][0] - 1))
+            all_delimiters.append((all_delimiters[-1][1] + 1, len(line) - 1))
+        else:
+            all_delimiters = [(0, len(line) - 1)]
+        split_line = self.__get_strings_between_indexes(line, all_delimiters)
+        return split_line
 
     def __split_non_strings_or_chars(self, non_strings_or_chars_list):
         """
@@ -236,9 +252,12 @@ class Scanner:
         """
         numbers_and_non_constants = []
         for line_portion in non_strings_or_chars_list:
-            line_portion = re.split(self.__get_regex_splitter(), line_portion)
-            line_portion = [t for t in line_portion if t is not None and t != ' ' and t != '']
-            numbers_and_non_constants.extend(line_portion)
+            if not (line_portion[0] == line_portion[-1] == '"'):
+                line_portion = re.split(self.__get_regex_splitter(), line_portion)
+                line_portion = [t for t in line_portion if t is not None and t != ' ' and t != '']
+                numbers_and_non_constants.extend(line_portion)
+            else:
+                numbers_and_non_constants.append(line_portion)
         return self.__reconstruct_signed_numbers(numbers_and_non_constants)
 
     def __reconstruct_signed_numbers(self, token_list):
@@ -324,25 +343,3 @@ class Scanner:
                  output: ["This", "is ", "strin"]
         """
         return [string[start: end + 1] for start, end in index_pairs]
-
-    @staticmethod
-    def __get_strings_outside_indexes(string, indexes):
-        """
-        Opposite operation of <__get_strings_between_indexes>
-        Return the substring from <line> which are NOT delimited by the indices from <index_pairs>
-        :param string: a string
-        :param indexes: list of pairs of indices
-        :return: list of substrings
-        example: input:  string = This is some string to be split
-                         index_pairs = [(0, 3), (5, 7), (13, 17)]
-                 output: [" ", "some ", "g to be split"]
-        """
-        if not len(indexes): return []
-        strings = [string[:indexes[0][0]]]
-        start = indexes[0][1]
-        for index_pair in indexes[1:]:
-            end = index_pair[0]
-            strings.append(string[start + 1: end])
-            start = index_pair[1]
-        strings.append(string[indexes[-1][1] + 1:])
-        return [s for s in strings if len(s) > 0]

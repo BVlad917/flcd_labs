@@ -2,6 +2,7 @@ from configuration import Configuration
 from parser_output import ParserOutput
 from state_type import StateType
 from symbols.symbol_type import SymbolType
+from symbols.terminal import Terminal
 
 
 class DescendantRecursiveParser:
@@ -19,7 +20,8 @@ class DescendantRecursiveParser:
     """
     def __init__(self, grammar, sequence_file_path):
         self.__grammar = grammar
-        self.__w = self.__read_sequence_from_file(sequence_file_path)
+        # self.__w = self.__read_sequence_from_text_file(sequence_file_path)
+        self.__w = self.__read_sequence_from_pif_file(sequence_file_path)
         self.__configuration = Configuration(grammar.starting_symbol)
 
     def solve(self):
@@ -38,11 +40,12 @@ class DescendantRecursiveParser:
                     self.momentary_insuccess()
                 else:
                     top_list_input_stack = self.__configuration.peek_input_stack()
-                    top_input_stack = top_list_input_stack[0]
+                    top_is = top_list_input_stack[0]
                     current_seq_pos = self.__configuration.current_seq_pos
-                    if top_input_stack.symbol_type == SymbolType.NON_TERMINAL:
+
+                    if top_is.symbol_type == SymbolType.NON_TERMINAL:
                         self.expand()
-                    elif current_seq_pos - 1 < len(self.__w) and top_input_stack.name == self.__w[current_seq_pos - 1]:
+                    elif current_seq_pos - 1 < len(self.__w) and top_is.name == self.__w[current_seq_pos - 1].name:
                         self.advance()
                     else:
                         self.momentary_insuccess()
@@ -206,7 +209,16 @@ class DescendantRecursiveParser:
         return self.__w
 
     @staticmethod
-    def __read_sequence_from_file(sequence_file_path):
+    def __read_sequence_from_text_file(sequence_file_path):
         with open(sequence_file_path, 'r') as f:
             w = f.readline().strip()
+        w = [Terminal(elem) for elem in w.split(',')]
         return w
+
+    @staticmethod
+    def __read_sequence_from_pif_file(sequence_file_path):
+        with open(sequence_file_path, 'r') as f:
+            lines = [line.strip() for line in f.readlines()]
+        lines = [line.split(' ')[0] for line in lines]
+        lines = [Terminal(line) for line in lines if len(line)]
+        return lines

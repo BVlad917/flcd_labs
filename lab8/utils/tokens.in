@@ -1,0 +1,3 @@
+operators:==,!=,//,<=,>=,=,<,>,+,-,*,/,%
+separators:[,],{,},(,),:, ,;
+reserved_words:const,array,int,char,string,while,else,if,for,read,write

@@ -9,8 +9,8 @@ from symbols.terminal import Terminal
 
 class TestDescendantRecursiveParser(unittest.TestCase):
     def setUp(self) -> None:
-        self.g = Grammar("./inputs/grammar3.in")
-        self.parser = DescendantRecursiveParser(self.g, "./inputs/seq3.txt")
+        self.g = Grammar("./inputs/grammar2.in")
+        self.parser = DescendantRecursiveParser(self.g, "./utils/pif.out")
 
     def test_expand(self):
         self.parser.expand()
@@ -133,5 +133,7 @@ class TestDescendantRecursiveParser(unittest.TestCase):
     def test_solver(self):
         parser_output = self.parser.solve()
         parser_output.save_to_file()
+        print()
+        print(parser_output.output_msg)
         # self.assertEquals(parser_output.output_msg, "SEQUENCE ACCEPTED")
         # self.assertIn("S1 a S2 a S3 c b S3 c", parser_output.representation)

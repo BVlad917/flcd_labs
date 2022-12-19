@@ -4,6 +4,10 @@ int b;
 int c;
 int min;
 
+a=7;
+b=9;
+c=11;
+
 if (a<b) {
     min=a;
 }
@@ -15,6 +19,6 @@ if (c<min) {
     min=c;
 }
 
-write("Minimum is ")
+write("Minimum is ");
 write(min);
 }
