@@ -519,8 +519,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "lang.l"
-#line 3 "lang.l"
+#line 1 "lang.lxi"
+#line 3 "lang.lxi"
 #include <stdio.h>
 #line 526 "lang.c"
 #line 527 "lang.c"
@@ -740,7 +740,7 @@ YY_DECL
 		}
 
 	{
-#line 15 "lang.l"
+#line 15 "lang.lxi"
 
 
 #line 747 "lang.c"
@@ -802,18 +802,18 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 17 "lang.l"
+#line 17 "lang.lxi"
 printf("Error: %s\n", yytext);
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 18 "lang.l"
+#line 18 "lang.lxi"
 printf("Error: %s\n", yytext);
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 19 "lang.l"
+#line 19 "lang.lxi"
 {
 if(*yytext!='\r' && *yytext!=' ' && *yytext!='\n' && *yytext!='\t')
 printf("Separator: %s\n",yytext);
@@ -821,47 +821,47 @@ printf("Separator: %s\n",yytext);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 23 "lang.l"
+#line 23 "lang.lxi"
 printf("Operator: %s\n",yytext);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 24 "lang.l"
+#line 24 "lang.lxi"
 printf( "A reserved word: %s\n", yytext);  
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 25 "lang.l"
+#line 25 "lang.lxi"
 printf("Identifier: %s\n",yytext);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 26 "lang.l"
+#line 26 "lang.lxi"
 printf("Constant number: %s\n",yytext);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 27 "lang.l"
+#line 27 "lang.lxi"
 printf("Constant char: %s\n",yytext);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 28 "lang.l"
+#line 28 "lang.lxi"
 printf("Constant string: %s\n",yytext);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 29 "lang.l"
+#line 29 "lang.lxi"
 printf("Error: %s\n", yytext);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 31 "lang.l"
+#line 31 "lang.lxi"
 printf("Error: '%s'\n", yytext);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 33 "lang.l"
+#line 33 "lang.lxi"
 ECHO;
 	YY_BREAK
 #line 868 "lang.c"
@@ -1869,7 +1869,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 33 "lang.l"
+#line 33 "lang.lxi"
 
 int main( argc, argv ) 
 int argc; 
