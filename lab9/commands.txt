@@ -1,0 +1,3 @@
+flex -o lang.c lang.l
+gcc -o lang lang.c
+./lang programs/p1.txt
