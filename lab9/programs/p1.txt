@@ -4,8 +4,8 @@ int b;
 int c;
 int min;
 
-a=7;
-b=9;
+a=012;
+b=+0;
 c=11;
 
 if (a<b) {

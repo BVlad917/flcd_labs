@@ -14,6 +14,7 @@ reserved "char"|"string"|"int"|"const"|"if"|"else"|"read"|"write"|"while"
 
 %%
 
+[-+]0 printf("Error: %s\n", yytext);
 [-+]?0{constnr} printf("Error: %s\n", yytext);
 {constnr}{identifier} printf("Error: %s\n", yytext);
 {separator} {

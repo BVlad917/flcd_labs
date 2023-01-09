@@ -355,8 +355,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 12
-#define YY_END_OF_BUFFER 13
+#define YY_NUM_RULES 13
+#define YY_END_OF_BUFFER 14
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -366,14 +366,14 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[79] =
     {   0,
-        0,    0,   13,   11,    3,    3,    3,   11,   10,    4,
-       11,    4,    4,    4,    7,    7,    4,    4,    4,    6,
-        6,    6,    6,    6,    6,    6,    6,    0,   10,    4,
-       10,    9,   10,    0,    7,    0,    1,    1,    2,    2,
-        7,    7,    6,    6,    6,    6,    6,    5,    6,    6,
-        6,    6,    6,    0,    8,    1,    1,    7,    7,    1,
-        1,    2,    2,    6,    6,    6,    6,    6,    6,    6,
-        1,    1,    6,    6,    6,    6,    6,    0
+        0,    0,   14,   12,    4,    4,    4,   12,   11,    5,
+       12,    5,    5,    5,    8,    8,    5,    5,    5,    7,
+        7,    7,    7,    7,    7,    7,    7,    0,   11,    5,
+       11,   10,   11,    1,    8,    0,    2,    2,    3,    3,
+        8,    8,    7,    7,    7,    7,    7,    6,    7,    7,
+        7,    7,    7,    0,    9,    2,    2,    8,    8,    2,
+        2,    3,    3,    7,    7,    7,    7,    7,    7,    7,
+        2,    2,    7,    7,    7,    7,    7,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -811,60 +811,65 @@ YY_RULE_SETUP
 printf("Error: %s\n", yytext);
 	YY_BREAK
 case 3:
-/* rule 3 can match eol */
 YY_RULE_SETUP
 #line 19 "lang.lxi"
+printf("Error: %s\n", yytext);
+	YY_BREAK
+case 4:
+/* rule 4 can match eol */
+YY_RULE_SETUP
+#line 20 "lang.lxi"
 {
 if(*yytext!='\r' && *yytext!=' ' && *yytext!='\n' && *yytext!='\t')
 printf("Separator: %s\n",yytext);
 }
 	YY_BREAK
-case 4:
-YY_RULE_SETUP
-#line 23 "lang.lxi"
-printf("Operator: %s\n",yytext);
-	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 24 "lang.lxi"
-printf( "A reserved word: %s\n", yytext);  
+printf("Operator: %s\n",yytext);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 25 "lang.lxi"
-printf("Identifier: %s\n",yytext);
+printf( "A reserved word: %s\n", yytext);  
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 26 "lang.lxi"
-printf("Constant number: %s\n",yytext);
+printf("Identifier: %s\n",yytext);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 27 "lang.lxi"
-printf("Constant char: %s\n",yytext);
+printf("Constant number: %s\n",yytext);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 28 "lang.lxi"
-printf("Constant string: %s\n",yytext);
+printf("Constant char: %s\n",yytext);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 29 "lang.lxi"
-printf("Error: %s\n", yytext);
+printf("Constant string: %s\n",yytext);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 31 "lang.lxi"
-printf("Error: '%s'\n", yytext);
+#line 30 "lang.lxi"
+printf("Error: %s\n", yytext);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 33 "lang.lxi"
+#line 32 "lang.lxi"
+printf("Error: '%s'\n", yytext);
+	YY_BREAK
+case 13:
+YY_RULE_SETUP
+#line 34 "lang.lxi"
 ECHO;
 	YY_BREAK
-#line 868 "lang.c"
+#line 873 "lang.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1869,7 +1874,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 33 "lang.lxi"
+#line 34 "lang.lxi"
 
 int main( argc, argv ) 
 int argc; 
