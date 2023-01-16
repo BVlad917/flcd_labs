@@ -1,0 +1,9 @@
+flex -o lang.c lang.lxi
+gcc -o lang lang.c
+./lang programs/p1.txt
+
+
+flex flex.l
+bison -dy lang.y
+gcc lex.yy.c y.tab.c
+./a.out lab1a/p1.txt

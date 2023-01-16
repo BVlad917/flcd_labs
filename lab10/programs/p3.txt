@@ -1,0 +1,23 @@
+{
+int[10] a;
+int index;
+int max;
+
+index=0;
+while(index<10) {
+    read(a[index]);
+    index=index+1;
+}
+
+max=a[0];
+index=1;
+while(index<10) {
+    if(a[index]>max) {
+        max=a[index];
+    }
+    index=index+1;
+}
+
+write("Maximum is ");
+write(max);
+}
